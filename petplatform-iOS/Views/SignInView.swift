@@ -12,41 +12,40 @@ struct SignInView: View {
     @State private var user: User = .default
     
     var body: some View {
-        VStack() {
-            HStack(){
-                Text("ID")
-                    .frame(width: 40, alignment: .center)
-                TextField("아이디", text: $user.userId)
-                    .border(.gray)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 160, alignment: .leading)
-            }
-            .frame(width: 200, height: 40, alignment: .center)
-            
-            HStack(){
-                Text("PW")
-                    .frame(width: 40, alignment: .center)
-                SecureField("비밀번호", text: $user.password)
-                    .border(.gray)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 160, alignment: .leading)
-            }
-            .frame(width: 200, height: 40, alignment: .center)
-            
-            VStack {
-                HStack {
+        if(user.userId == ""){
+            NavigationView {
+                VStack() {
+                    HStack(){
+                        Text("ID")
+                            .frame(width: 40, alignment: .center)
+                        TextField("아이디", text: $user.userId)
+                            .border(.gray)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(width: 160, alignment: .leading)
+                    }
+                    .frame(width: 200, height: 40, alignment: .center)
                     
-                    Button(action: {
-                        
-                            }
-                           , label: {
-                                Text("Sign-up")
-                            })
-                    .frame(alignment: .trailing)
+                    HStack(){
+                        Text("PW")
+                            .frame(width: 40, alignment: .center)
+                        SecureField("비밀번호", text: $user.password)
+                            .border(.gray)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(width: 160, alignment: .leading)
+                    }
+                    .frame(width: 200, height: 40, alignment: .center)
                     
-                    Spacer()
-                    
-                    Button(action: {
+                    VStack {
+                        HStack {
+                            NavigationLink(
+                                destination: SignUpView(),
+                                label: {
+                                    Text("Sign-up")
+                                })
+                            
+                            Spacer()
+                            
+                            Button(action: {
                                 Task {
                                     do{
                                         user = try await user.signIn(user: user)
@@ -57,20 +56,24 @@ struct SignInView: View {
                             }, label: {
                                 Text("Sign-in")
                             })
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.roundedRectangle(radius: 7))
-                        .frame(alignment: .leading)
-                }
-                .frame(width: 165, alignment: .center)
-                
-                Button(action: {
-                    
+                            .buttonStyle(.borderedProminent)
+                            .buttonBorderShape(.roundedRectangle(radius: 7))
+                            .frame(alignment: .leading)
+                        }
+                        .frame(width: 165, alignment: .center)
+                        
+                        Button(action: {
+                            
                         }, label: {
                             Text("Forgot your ID/PW?")
                                 .font(.system(size: 11))
                                 .underline()
                         })
+                    }
+                }
             }
+        }else {
+            MainView(user: user)
         }
     }
 }

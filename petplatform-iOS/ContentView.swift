@@ -9,9 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var modelData: ModelData
+    @State private var user: User = .default
     
     var body: some View {
-        SignInView()
+        if(user.userId == ""){
+            SignInView()
+        }else {
+            MainView(user: user)
+        }
     }
 }
 
